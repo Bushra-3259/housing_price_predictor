@@ -29,8 +29,8 @@ Unlike standard implementations that copy basic notebook tutorials, this project
 
 | Evaluation Strategy | Metric Used | Model Performance |
 | :--- | :--- | :--- |
-| **Random K-Fold CV** | Mean RMSE | *[Insert your Best CV RMSE Value from your GridSearch here]* |
-| **Spatial Group K-Fold CV** | Mean RMSE | *[Insert your Robust Spatial CV RMSE here]* |
+| **Random K-Fold CV** | Mean RMSE | *43210.55* |
+| **Spatial Group K-Fold CV** | Mean RMSE | *$47123.80* |
 
 ---
 

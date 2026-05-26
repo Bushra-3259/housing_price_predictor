@@ -36,6 +36,24 @@ Unlike standard implementations that copy basic notebook tutorials, this project
 
 ## 💻 How to Use the App
 
-1. Enter the target neighborhood metrics (Coordinates, Median Income, Total Rooms, Households, etc.).
-2. Select the relative **Ocean Proximity** classification.
-3. Click **Calculate Estimated Value** to trigger live pipeline inference and drop an un-skewed real estate dollar evaluation on screen.
+1. **Enter the target neighborhood metrics:** Input the structural and economic data corresponding to a specific California census block.
+
+- Example: **Longitude:** -122.23 **|** **Latitude:** 37.88
+
+  - **Median House Age:** 41.0 years
+
+  - **Total Rooms in Block:** 880.0 **|** **Total Bedrooms in Block:** 129.0
+
+  - **Block Population:** 322.0 **|** **Total Households:** 126.0
+
+  - **Median Income:** 8.32 (representing a median household income of $83,200)
+
+2. **Select the relative Ocean Proximity classification:** Choose a geographical location category from the dropdown menu to capture localized coastal or inland value characteristics.
+
+- Example: Select NEAR BAY if analyzing a neighborhood block located around the San Francisco Bay area, or INLAND if the property is located within Central Valley.
+
+3. **Click Calculate Estimated Value:** Trigger the live pipeline inference engine.
+
+- Example: Clicking the execution button passes your raw input data through the custom spatial feature extraction classes, applies scaling, runs the fine-tuned LightGBM model weights, and automatically returns a clean, human-readable real estate dollar evaluation directly on your screen.
+
+- Expected Output: 🎉 Estimated Median Neighborhood House Value: $358,500.00

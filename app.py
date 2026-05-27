@@ -2,11 +2,12 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
+import sys
 from sklearn.base import BaseEstimator, TransformerMixin
 
+# 1. Define the custom class exactly matching your notebook training architecture
 class AdvancedHousingFeatures(BaseEstimator, TransformerMixin):
     def __init__(self):
-        # Coordinates for economic hubs used during training
         self.sf_coords = (37.7749, -122.4194)
         self.la_coords = (34.0522, -118.2437)
         
@@ -15,21 +16,23 @@ class AdvancedHousingFeatures(BaseEstimator, TransformerMixin):
         
     def transform(self, X):
         X_out = X.copy()
-        # Custom spatial distance engineering calculations
         X_out["dist_to_sf"] = np.sqrt((X_out["latitude"] - self.sf_coords[0])**2 + 
                                       (X_out["longitude"] - self.sf_coords[1])**2)
         X_out["dist_to_la"] = np.sqrt((X_out["latitude"] - self.la_coords[0])**2 + 
                                       (X_out["longitude"] - self.la_coords[1])**2)
         return X_out
 
-# 1. Load your trained cloud pipeline safely using caching to keep performance fast
+# 2. Load your trained cloud pipeline safely using caching
 @st.cache_resource
 def load_model():
+    # Force bind the class definition directly to the global execution module 
+    # immediately before unpickling occurs to completely bypass the namespace bug.
+    sys.modules['__main__'].AdvancedHousingFeatures = AdvancedHousingFeatures
     return joblib.load("california_housing_model.pkl")
 
 model = load_model()
 
-# 2. Design your website's user interface headers
+# 3. Design your website's user interface headers
 st.title("🏡 California House Price Predictor")
 st.markdown("Enter neighborhood metrics below to estimate median home values using our tuned LightGBM Pipeline.")
 
@@ -53,7 +56,7 @@ ocean_proximity = st.selectbox(
     ["NEAR BAY", "<1H OCEAN", "INLAND", "NEAR OCEAN", "ISLAND"]
 )
 
-# 3. Run prediction calculations when the user clicks the action button
+# 4. Run prediction calculations when the user clicks the action button
 if st.button("Calculate Estimated Value"):
     input_df = pd.DataFrame([{
         "longitude": longitude,
@@ -67,6 +70,6 @@ if st.button("Calculate Estimated Value"):
         "ocean_proximity": ocean_proximity
     }])
     
-    # Run the pipeline inference step
+    # Run pipeline inference step
     predicted_price = model.predict(input_df)[0]
     st.success(f"🎉 Estimated Median Neighborhood House Value: ${predicted_price:,.2f}")

@@ -4,7 +4,7 @@ import numpy as np
 import joblib
 from sklearn.base import BaseEstimator, TransformerMixin
 
-class SpatialDistanceTransformer(BaseEstimator, TransformerMixin):
+class AdvancedHousingFeatures(BaseEstimator, TransformerMixin):
     def __init__(self):
         # Coordinates for economic hubs used during training
         self.sf_coords = (37.7749, -122.4194)
@@ -15,15 +15,14 @@ class SpatialDistanceTransformer(BaseEstimator, TransformerMixin):
         
     def transform(self, X):
         X_out = X.copy()
-        # Calculate Haversine or simple Euclidean distance matching your training notebook
-        # Adjust these column references if your notebook math used a different formula
+        # Custom spatial distance engineering calculations
         X_out["dist_to_sf"] = np.sqrt((X_out["latitude"] - self.sf_coords[0])**2 + 
                                       (X_out["longitude"] - self.sf_coords[1])**2)
         X_out["dist_to_la"] = np.sqrt((X_out["latitude"] - self.la_coords[0])**2 + 
                                       (X_out["longitude"] - self.la_coords[1])**2)
         return X_out
 
-# 1. Load your trained cloud pipeline safely using caching
+# 1. Load your trained cloud pipeline safely using caching to keep performance fast
 @st.cache_resource
 def load_model():
     return joblib.load("california_housing_model.pkl")
@@ -68,5 +67,6 @@ if st.button("Calculate Estimated Value"):
         "ocean_proximity": ocean_proximity
     }])
     
+    # Run the pipeline inference step
     predicted_price = model.predict(input_df)[0]
     st.success(f"🎉 Estimated Median Neighborhood House Value: ${predicted_price:,.2f}")

@@ -2,10 +2,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-import sys
+import io
 from sklearn.base import BaseEstimator, TransformerMixin
 
-# 1. Define the custom class exactly matching your notebook training architecture
+# 1. Define the custom transformer class
 class AdvancedHousingFeatures(BaseEstimator, TransformerMixin):
     def __init__(self):
         self.sf_coords = (37.7749, -122.4194)
@@ -22,17 +22,25 @@ class AdvancedHousingFeatures(BaseEstimator, TransformerMixin):
                                       (X_out["longitude"] - self.la_coords[1])**2)
         return X_out
 
-# 2. Load your trained cloud pipeline safely using caching
+# 2. Create a custom Unpickler to intercept namespace resolution safely
+class CustomJoblibUnpickler(joblib.numpy_pickle.NumpyUnpickler):
+    def find_class(self, module, name):
+        if name == 'AdvancedHousingFeatures':
+            return AdvancedHousingFeatures
+        return super().find_class(module, name)
+
+# 3. Load your trained pipeline safely using our custom unpickler inside cache
 @st.cache_resource
 def load_model():
-    # Force bind the class definition directly to the global execution module 
-    # immediately before unpickling occurs to completely bypass the namespace bug.
-    sys.modules['__main__'].AdvancedHousingFeatures = AdvancedHousingFeatures
-    return joblib.load("california_housing_model.pkl")
+    filename = "california_housing_model.pkl"
+    with open(filename, 'rb') as f:
+        # Replicating joblib.load behavior but forcing our custom class resolver
+        unpickler = CustomJoblibUnpickler(f)
+        return unpickler.load()
 
 model = load_model()
 
-# 3. Design your website's user interface headers
+# 4. Design your website's user interface headers
 st.title("🏡 California House Price Predictor")
 st.markdown("Enter neighborhood metrics below to estimate median home values using our tuned LightGBM Pipeline.")
 
@@ -56,7 +64,7 @@ ocean_proximity = st.selectbox(
     ["NEAR BAY", "<1H OCEAN", "INLAND", "NEAR OCEAN", "ISLAND"]
 )
 
-# 4. Run prediction calculations when the user clicks the action button
+# 5. Run prediction calculations when the user clicks the action button
 if st.button("Calculate Estimated Value"):
     input_df = pd.DataFrame([{
         "longitude": longitude,

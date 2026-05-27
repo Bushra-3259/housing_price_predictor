@@ -2,8 +2,28 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
+from sklearn.base import BaseEstimator, TransformerMixin
 
-# 1. Load your trained cloud pipeline safely using caching to keep performance fast
+class SpatialDistanceTransformer(BaseEstimator, TransformerMixin):
+    def __init__(self):
+        # Coordinates for economic hubs used during training
+        self.sf_coords = (37.7749, -122.4194)
+        self.la_coords = (34.0522, -118.2437)
+        
+    def fit(self, X, y=None):
+        return self
+        
+    def transform(self, X):
+        X_out = X.copy()
+        # Calculate Haversine or simple Euclidean distance matching your training notebook
+        # Adjust these column references if your notebook math used a different formula
+        X_out["dist_to_sf"] = np.sqrt((X_out["latitude"] - self.sf_coords[0])**2 + 
+                                      (X_out["longitude"] - self.sf_coords[1])**2)
+        X_out["dist_to_la"] = np.sqrt((X_out["latitude"] - self.la_coords[0])**2 + 
+                                      (X_out["longitude"] - self.la_coords[1])**2)
+        return X_out
+
+# 1. Load your trained cloud pipeline safely using caching
 @st.cache_resource
 def load_model():
     return joblib.load("california_housing_model.pkl")
@@ -36,7 +56,6 @@ ocean_proximity = st.selectbox(
 
 # 3. Run prediction calculations when the user clicks the action button
 if st.button("Calculate Estimated Value"):
-    # Convert inputs into a structured DataFrame matching your original X_train layout
     input_df = pd.DataFrame([{
         "longitude": longitude,
         "latitude": latitude,
@@ -49,8 +68,5 @@ if st.button("Calculate Estimated Value"):
         "ocean_proximity": ocean_proximity
     }])
     
-    # Your pipeline handles custom spatial distances, scaling, and target inversion automatically!
     predicted_price = model.predict(input_df)[0]
-    
-    # Display the final dollar prediction beautifully on screen
     st.success(f"🎉 Estimated Median Neighborhood House Value: ${predicted_price:,.2f}")

@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
+import sys
+import types
 from sklearn.base import BaseEstimator, TransformerMixin
 
 # 1. Define the custom transformer class matching your notebook exactly
@@ -21,27 +23,26 @@ class AdvancedHousingFeatures(BaseEstimator, TransformerMixin):
                                       (X_out["longitude"] - self.la_coords[1])**2)
         return X_out
 
-# 2. Inherit and intercept class checks cleanly inside joblib's custom unpickler
-class CustomJoblibUnpickler(joblib.numpy_pickle.NumpyUnpickler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+# 2. Inject our class directly into __main__ namespaces to satisfy the pickle loader
+# This bypasses the need to subclass or monkey-patch joblib entirely
+try:
+    setattr(sys.modules['__main__'], 'AdvancedHousingFeatures', AdvancedHousingFeatures)
+except Exception:
+    pass
 
-    def find_class(self, module, name):
-        if name == 'AdvancedHousingFeatures':
-            return AdvancedHousingFeatures
-        return super().find_class(module, name)
+# Create an fallback fake module just in case Streamlit isolates '__main__' completely
+fake_main = types.ModuleType('__main__')
+fake_main.AdvancedHousingFeatures = AdvancedHousingFeatures
+sys.modules.setdefault('__main__', fake_main)
 
-# 3. Load your trained cloud pipeline safely using caching
+# 3. Load your trained cloud pipeline safely using standard joblib with caching
 @st.cache_resource
 def load_model():
-    filename = "california_housing_model.pkl"
-    with open(filename, 'rb') as f:
-        unpickler = CustomJoblibUnpickler(f)
-        return unpickler.load()
+    return joblib.load("california_housing_model.pkl")
 
 model = load_model()
 
-# 4. User Interface Headers
+# 4. User Interface Setup
 st.title("🏡 California House Price Predictor")
 st.markdown("Enter neighborhood metrics below to estimate median home values using our tuned LightGBM Pipeline.")
 

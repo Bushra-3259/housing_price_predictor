@@ -35,7 +35,7 @@ Stages 06 and 07 map out the histogram-based boosting engine configuration and i
 
 | Stage 06: HistGradientBoosting Engine | Stage 07: Master Estimator Packaging |
 | :---: | :---: |
-| ![Modeling Core and Master Pipeline Packaging](./assets/p6.png) | !(./assets/p7.png) |
+| ![Modeling Core and Master Pipeline Packaging](./assets/p6.png) | (./assets/p7.png) |
 
 ---
 

@@ -33,8 +33,8 @@ Below are the architectural layers handling data scrubbing, custom transformers,
 ### 📊 HistGradientBoostingRegressor Modeling Core
 Stage 06 displays the complete optimized pipeline configuration, showing the preprocessing layers funneling directly into the fine-tuned histogram-based boosting engine parameters:
 
-![Modeling Core (Top)](./assets/p6.png)
-![Modeling Core (Bottom)](./assets/p7.png)
+![Modeling Core Top](./assets/p6.png)
+![Modeling Core Bottom](./assets/p7.png)
 
 ---
 

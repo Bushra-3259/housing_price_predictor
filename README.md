@@ -2,11 +2,6 @@
 
 A production-grade Machine Learning application deployed via Streamlit that predicts the median house value of neighborhoods in California. This project significantly improves upon standard baseline tutorial models by incorporating target un-biasing, advanced spatial feature engineering, and robust cross-validation tracking.
 
-### 🛠️ Pipeline Architecture Blueprint
-Below is the complete interactive execution flow of the modular architecture, tracking data transformations from raw features to deployed production inference:
-
-![Pipeline Architecture](./assets/pipeline_grid.png)
-
 ---
 
 ## 🚀 Key Engineering Enhancements (Over the Baseline Tutorial)
@@ -20,10 +15,39 @@ Unlike standard implementations that copy basic notebook tutorials, this project
 
 ---
 
-## 🔍 Exploratory Data Analysis
+## 🛠️ Complete Pipeline Architecture Execution Flow
+
+The full end-to-end processing pipeline is built completely modularly. Here is the sequential execution flow tracing data from raw ingestion to production-ready deployment model outputs:
+
+### ⚙️ Core Preprocessing & Feature Extraction Steps
+Below are the architectural layers handling data scrubbing, custom transformers, and pipeline structuring:
+
+| Stage 01: Preprocessing Core | Stage 02: Structural Split Core | Stage 03: Feature Processing Switching |
+| :---: | :---: | :---: |
+| ![Preprocessing](./assets/p1.png) | ![Structural Split](./assets/p2.png) | ![Feature Processing](./assets/p3.png) |
+
+| Stage 04: Engineering Matrix | Stage 05: Pipeline Structure Matrix | Stage 06: Modeling Matrix Core |
+| :---: | :---: | :---: |
+| ![Engineering Matrix](./assets/p4.png) | ![Pipeline Structure](./assets/p5.png) | ![Modeling Core](./assets/p6.png) |
+
+### 📦 Master Deployment Packaging
+The final stage abstracts the pipeline into a single tracking wrapper optimized for live low-latency web scaling:
+
+![Master Pipeline Packaging](./assets/p7.png)
+
+---
+
+## 🔍 Exploratory Data Analysis & Custom Engineering
+
 Before writing feature classes, I mapped out density matrices and coordinate attributes to isolate spatial correlations and target skews.
 
-![Correlation Heatmap](./assets/image_5c05c6.png)
+### Spatial Feature Engineering Logic
+To compute precise economic distance anchors, I wrote a custom, object-oriented Scikit-Learn transformer class:
+
+![Advanced Spatial Engineering Code](./assets/code.png)
+
+### Feature Correlation Heatmap
+![Correlation Heatmap](./assets/image.png)
 
 ---
 
@@ -40,26 +64,9 @@ Before writing feature classes, I mapped out density matrices and coordinate att
 
 The residual distribution curve below confirms that our validation checks are structurally sound—the final LightGBM errors are mathematically unbiased and tightly clustered around zero:
 
-![Residual Distribution Curve](./assets/image_5c02c6.png)
+![Residual Distribution Curve](./assets/image2.png)
 
 | Evaluation Strategy | Metric Used | Model Performance |
 | :--- | :--- | :--- |
 | **Random K-Fold CV** | Mean RMSE | $43,210.55 |
 | **Spatial Group K-Fold CV** | Mean RMSE | $47,123.80 |
-
----
-
-## 💻 How to Use the App
-
-1. **Enter the target neighborhood metrics:** Input the structural and economic data corresponding to a specific California census block.
-   * *Example:* Longitude: `-122.23` \| Latitude: `37.88`
-   * Median House Age: `41.0 years`
-   * Total Rooms in Block: `880.0` \| Total Bedrooms in Block: `129.0`
-   * Block Population: `322.0` \| Total Households: `126.0`
-   * Median Income: `8.32` *(representing a median household income of $83,200)*
-2. **Select the relative Ocean Proximity classification:** Choose a geographical location category from the dropdown menu to capture localized coastal or inland value characteristics.
-   * *Example:* Select `NEAR BAY` if analyzing a neighborhood block located around the San Francisco Bay area, or `INLAND` if the property is located within Central Valley.
-3. **Click Calculate Estimated Value:** Trigger the live pipeline inference engine.
-   * *Example:* Clicking the execution button passes your raw input data through the custom spatial feature extraction classes, applies scaling, runs the fine-tuned LightGBM model weights, and automatically returns a clean, human-readable real estate dollar evaluation directly on your screen.
-
-**Expected Output:** 🎉 *Estimated Median Neighborhood House Value: $358,500.00*

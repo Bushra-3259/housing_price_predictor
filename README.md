@@ -1,6 +1,6 @@
-# 🏡 California Housing Price Predictor (End-to-End Tuned LightGBM Pipeline)
+# 🏡 California Housing Price Predictor (End-to-End Modular LightGBM Pipeline)
 
-A production-grade Machine Learning application deployed via Streamlit that predicts the median house value of neighborhoods in California. This project significantly improves upon standard baseline tutorial models by incorporating target un-biasing, advanced spatial feature engineering, and robust cross-validation tracking.
+A production-grade Machine Learning engineering framework designed to predict the median house value of census blocks in California. This project significantly improves upon standard baseline tutorial models by incorporating automated target un-biasing, advanced spatial feature extraction classes, and robust cross-validation tracking systems.
 
 ---
 
@@ -10,14 +10,14 @@ Unlike standard implementations that copy basic notebook tutorials, this project
 * **Mitigated Capping Bias:** Audited the dataset to remove artificial target truncation limits (capped at $500,001), preventing decision trees from training on bottlenecked values and reducing model errors.
 * **Advanced Spatial Feature Engineering:** Engineered proximity variables calculating the direct distance from each neighborhood block to California's primary economic hubs (San Francisco and Los Angeles).
 * **State-of-the-Art Architecture:** Swapped standard boosting models for Microsoft's LightGBM Regressor, utilizing histogram-based binning to maximize training speed and accuracy.
-* **Automated Target Scaling:** Integrated a TransformedTargetRegressor wrapper to automatically handle mathematical log-transformations (np.log1p) to fix right-skewed price distributions, reversing it seamlessly during live cloud inference.
+* **Automated Target Scaling:** Integrated a TransformedTargetRegressor wrapper to automatically handle mathematical log-transformations (np.log1p) to fix right-skewed price distributions, reversing it seamlessly during inference evaluation.
 * **Robust Spatial Cross-Validation:** Implemented a structural GroupKFold validator based on coordinate blocks to evaluate real-world model generalizability on completely unseen geographic regions.
 
 ---
 
 ## 🛠️ Complete Pipeline Architecture Execution Flow
 
-The full end-to-end processing pipeline is built completely modularly. Here is the sequential execution flow tracing data from raw ingestion to production-ready deployment model outputs:
+The full end-to-end processing pipeline is built completely modularly. Here is the sequential execution flow tracing data from raw ingestion to the final validated model output weights:
 
 ### ⚙️ Core Preprocessing & Feature Extraction Steps
 Below are the architectural layers handling data scrubbing, custom transformers, and pipeline structuring:
@@ -30,8 +30,8 @@ Below are the architectural layers handling data scrubbing, custom transformers,
 | :---: | :---: | :---: |
 | ![Engineering Matrix](./assets/p4.png) | ![Pipeline Structure](./assets/p5.png) | ![Modeling Core](./assets/p6.png) |
 
-### 📦 Master Deployment Packaging
-The final stage abstracts the pipeline into a single tracking wrapper optimized for live low-latency web scaling:
+### 📦 Master Execution Wrapper
+The final stage abstracts the sequential components into a unified pipeline container optimized for clean, leak-proof execution:
 
 ![Master Pipeline Packaging](./assets/p7.png)
 
@@ -42,7 +42,7 @@ The final stage abstracts the pipeline into a single tracking wrapper optimized 
 Before writing feature classes, I mapped out density matrices and coordinate attributes to isolate spatial correlations and target skews.
 
 ### Spatial Feature Engineering Logic
-To compute precise economic distance anchors, I wrote a custom, object-oriented Scikit-Learn transformer class:
+To compute precise economic distance anchors, I wrote a custom, object-oriented Scikit-Learn transformer class that handles geographic calculations seamlessly inside the pipeline:
 
 ![Advanced Spatial Engineering Code](./assets/code.png)
 
@@ -55,14 +55,13 @@ To compute precise economic distance anchors, I wrote a custom, object-oriented 
 
 * **Language:** Python 3.10
 * **Environment:** Google Colab (Cloud Architecture)
-* **Core Libraries:** Scikit-Learn, LightGBM, Pandas, NumPy, Joblib
-* **Deployment:** Streamlit Community Cloud
+* **Core Libraries:** Scikit-Learn, LightGBM, Pandas, NumPy, Joblib, Matplotlib, Seaborn
 
 ---
 
-## 📊 Performance Metrics & Validation
+## 📊 Performance Metrics & Validation Results
 
-The residual distribution curve below confirms that our validation checks are structurally sound—the final LightGBM errors are mathematically unbiased and tightly clustered around zero:
+The residual distribution curve below confirms that our validation checks are structurally sound—the final LightGBM errors are mathematically unbiased, normal, and tightly clustered around zero:
 
 ![Residual Distribution Curve](./assets/image2.png)
 
@@ -70,3 +69,5 @@ The residual distribution curve below confirms that our validation checks are st
 | :--- | :--- | :--- |
 | **Random K-Fold CV** | Mean RMSE | $43,210.55 |
 | **Spatial Group K-Fold CV** | Mean RMSE | $47,123.80 |
+
+Our spatial validation strategy proves that while a simple random split looks overly optimistic, the `GroupKFold` approach yields a highly resilient framework capable of accurately evaluating completely unseen real estate geographic territories.

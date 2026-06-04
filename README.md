@@ -30,12 +30,11 @@ Below are the architectural layers handling data scrubbing, custom transformers,
 | :---: | :---: |
 | ![Engineering Matrix](./assets/p4.png) | ![Pipeline Structure](./assets/p5.png) |
 
-### 📊 HistGradientBoostingRegressor Modeling Core & Packaging
-Stages 06 and 07 map out the histogram-based boosting engine configuration and its master integration wrapper, designed for clean, leak-proof training and evaluation:
+### 📊 HistGradientBoostingRegressor Modeling Core
+Stage 06 displays the complete optimized pipeline configuration, showing the preprocessing layers funneling directly into the fine-tuned histogram-based boosting engine parameters:
 
-| Stage 06: HistGradientBoosting Engine | Stage 07: Master Estimator Packaging |
-| :---: | :---: |
-| ![Modeling Core and Master Pipeline Packaging](./assets/p6.png) | (./assets/p7.png) |
+![Modeling Core (Top)](./assets/p6.png)
+![Modeling Core (Bottom)](./assets/p7.png)
 
 ---
 
